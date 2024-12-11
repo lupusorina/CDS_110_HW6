@@ -31,7 +31,7 @@ def ctrl_linear(state:np.ndarray,
     v_B = R.T @ np.array([v_B_x, v_B_y])
 
     # e1.
-    e_perp = perr_d_B[1]
+    e_perp = perr_B[1]
     # e1_dot.
     e_perp_dot = v_B_y + v_B_x * wrap_circular_value(theta - theta_d)
     # e2.
@@ -109,7 +109,7 @@ def ctrl_linear(state:np.ndarray,
 # Simulation parameters
 N = 3000
 DT = 0.01
-PB_PART = 'e'
+PB_PART = 'c'
 
 # Model params.
 params = {"dt": DT,
@@ -237,5 +237,14 @@ figure_folder = 'figures/'
 if not os.path.exists(figure_folder):
     os.makedirs(figure_folder)
 plt.savefig(figure_folder + 'pb_' + PB_PART + '.pdf')
+
+plt.figure()
+plt.plot(e_perp_array, label='e_perp')
+# plt.plot(e_perp_dot_array, label='e_perp_dot')
+plt.plot(theta_err_array, label='theta_err')
+# plt.plot(omega_err_array, label='omega_err')
+plt.title('Performance')
+plt.legend()
+
 
 plt.show()
