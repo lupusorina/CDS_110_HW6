@@ -87,8 +87,6 @@ def ctrl_linear(state:np.ndarray,
         integral_errors = None
 
     u_steering = np.clip(u_steering, -params['max_steering'], params['max_steering'])
-    print('u steering', u_steering)
-    print('max steering', params['max_steering'])
 
     b = 1/params['tau']
     a = -1/params['tau']
