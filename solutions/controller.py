@@ -28,7 +28,7 @@ def ctrl_linear(state:np.ndarray,
     perr_B = R.T @ p_err_I
     perr_d_B = R_d.T @ p_err_I
     v_d_B = R_d.T @ v_d_I
-    v_B = R.T @ np.array([v_B_x, v_B_y])
+    R_error = R_d.T @ R
 
     # e1.
     e_perp = perr_B[1]
@@ -81,17 +81,19 @@ def ctrl_linear(state:np.ndarray,
 
     if part_pb == 'f':
         K = np.array([params_ctrl['K_E'], params_ctrl['K_E_DOT'], params_ctrl['K_THETA'], params_ctrl['K_OMEGA']])
-        radius_traj = 2.2
-        u_ff = np.arctan(params_robot['L']/radius_traj)
+        radius_traj = 300
+        u_ff = params_robot['L']/radius_traj * (1 - params_ctrl['K_THETA']) + params_ctrl['K_THETA'] * params["mass"] * v_B_x**2 / (params["Cy"] * radius_traj)
         u_steering = -K @ e + u_ff
         integral_errors = None
 
     u_steering = np.clip(u_steering, -params['max_steering'], params['max_steering'])
+    print('u steering', u_steering)
+    print('max steering', params['max_steering'])
 
     b = 1/params['tau']
     a = -1/params['tau']
-    KP = 0.01
-    u_v = -1/b*( KP * (v_B[0] - v_d_B[0]) + a * v_d_B[0])
+    KP = 1.0
+    u_v = -1/b*( KP * (v_B_x - v_d_B[0]) + a * v_d_B[0])
     u_v = np.clip(u_v, -params['max_vel'], params['max_vel'])
 
     # Debug params.
