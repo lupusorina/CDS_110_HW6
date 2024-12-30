@@ -3,8 +3,7 @@ from systems import BicycleModel
 from trajectory import compute_circle_start_on_circle, wrap_circular_value
 import matplotlib.pyplot as plt
 import os
-from scipy.linalg import solve_continuous_are
-from scipy.linalg import inv
+from scipy.linalg import solve_continuous_are, inv
 
 
 class Controller:
