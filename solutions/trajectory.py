@@ -7,10 +7,11 @@ def wrap_circular_value(input_value: float) -> float:
 def compute_circle_start_on_circle(angle: float,
                                    dt: float,
                                    v_desired: float,
-                                   initial_state_I: np.ndarray) -> np.ndarray:
-    R = 2.2
+                                   initial_state_I: np.ndarray,
+                                   R:float) -> np.ndarray:
     omega = v_desired / R
     angle = angle + dt * omega
+    angle = wrap_circular_value(angle)
 
     x0, y0, th0 = initial_state_I[0], initial_state_I[1], initial_state_I[2]
     x = x0 - R * math.sin(th0) + R * math.sin((angle + th0))
